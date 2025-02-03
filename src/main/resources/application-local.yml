@@ -1,0 +1,46 @@
+application:
+  title: Hackaton
+  version: 1.0
+
+
+
+spring:
+  main:
+    allow-bean-definition-overriding: true
+  application:
+    name: Hackaton
+    data:
+      mongodb:
+        host: 0.0.0.0
+        port : 27017
+        database: hackaton
+
+server:
+  servlet:
+    context-path: /api
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+  path: swagger-ui-custom.html
+
+aws:
+  account:
+    number: 916639192459
+  region:
+    name: us-east-1
+  sqs:
+    notificator:
+      queue: sqs-request-video-notificator
+    processor:
+      queue: sqs-request-video-processor
+  s3:
+    bucket:
+        in:
+          name: processor-in
+          file:
+            type: video/mp4
+        out:
+          name: processor-out

@@ -1,0 +1,21 @@
+application:
+  title: Hackaton
+  version: 1.0
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: Hackaton
+server:
+  servlet:
+    context-path: /api
+  port: 8080
+
+springdoc:
+  api-docs:
+    path: /api-docs
+  swagger-ui:
+  path: swagger-ui-custom.html
+
+
