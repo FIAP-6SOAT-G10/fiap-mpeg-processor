@@ -26,7 +26,7 @@
     <groupId>br.com.fiap</groupId>
     <artifactId>fiap-mpeg-processor</artifactId>
     <version>1.0</version>
-    <name>Fiap Hackaton Microservice</name>
+    <name>Processor</name>
 
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
