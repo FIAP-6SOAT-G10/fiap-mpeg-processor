@@ -9,7 +9,7 @@ spring:
     name: Hackaton
   data:
     mongodb:
-      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/processor-db
+      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/processor_db
 
 server:
   servlet:
