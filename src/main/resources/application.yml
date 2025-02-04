@@ -4,7 +4,7 @@ application:
 
 spring:
   profiles:
-    active: local
+    active: '@activeProfile@'
   application:
     name: Hackaton
 server:
