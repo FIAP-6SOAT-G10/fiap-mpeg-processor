@@ -7,11 +7,9 @@ spring:
     allow-bean-definition-overriding: true
   application:
     name: Hackaton
-    data:
-      mongodb:
-        host: 0.0.0.0
-        port : 27017
-        database: hackaton
+  data:
+    mongodb:
+      uri: mongodb+srv://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/processor-db
 
 server:
   servlet:
@@ -26,7 +24,7 @@ springdoc:
 
 aws:
   account:
-    number: 916639192459
+    number: 115353667788
   region:
     name: us-east-1
   sqs:

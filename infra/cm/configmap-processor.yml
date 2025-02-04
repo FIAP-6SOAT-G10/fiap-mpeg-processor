@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cm-processor
+data:
+  DB_HOST: fiap-cluster.mopef.mongodb.net
+  DB_USERNAME: masteruser
