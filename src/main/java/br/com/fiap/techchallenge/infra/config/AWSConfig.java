@@ -1,8 +1,8 @@
 package br.com.fiap.techchallenge.infra.config;
 
-import lombok.experimental.UtilityClass;
+import org.springframework.context.annotation.Configuration;
 
-@UtilityClass
+@Configuration
 public class AWSConfig {
 
     static {
