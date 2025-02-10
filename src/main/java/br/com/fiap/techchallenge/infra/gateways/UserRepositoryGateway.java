@@ -4,10 +4,7 @@ import br.com.fiap.techchallenge.application.gateways.IUserRepository;
 import br.com.fiap.techchallenge.infra.mapper.UserMapper;
 import br.com.fiap.techchallenge.infra.repository.UserRepository;
 import br.com.fiap.techchallenge.infra.repository.dto.UserDTO;
-import br.com.fiap.techchallenge.infra.repository.entity.User;
 import lombok.extern.slf4j.Slf4j;
-
-import java.util.Optional;
 
 @Slf4j
 public class UserRepositoryGateway implements IUserRepository {
