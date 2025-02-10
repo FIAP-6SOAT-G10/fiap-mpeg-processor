@@ -14,6 +14,7 @@ public class UserDetail {
     private String id;
     private String filename;
     private String status;
+    private String error;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
@@ -50,5 +51,13 @@ public class UserDetail {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getError() {
+        return error;
+    }
+
+    public void setError(String error) {
+        this.error = error;
     }
 }

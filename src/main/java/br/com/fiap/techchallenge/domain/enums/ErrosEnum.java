@@ -11,6 +11,8 @@ public enum ErrosEnum {
 
     /* ERROS GENÉRICOS 001 - 99 */
     ERRO_PARAMETRO("001","Não é possivel processar uma arquivo com formato diferente de mp4.", Level.ERROR, HttpStatus.BAD_REQUEST),
+    FILE_PROCESSED_ERROR("002","Ocorreu um erro ao tentar processar o arquivo.", Level.ERROR, HttpStatus.BAD_REQUEST),
+    ZIP_FILE_PROCESSED_ERROR("003","Ocorreu um erro ao tentar gerar o arquivo compactado", Level.ERROR, HttpStatus.BAD_REQUEST),
 
 
     ;
