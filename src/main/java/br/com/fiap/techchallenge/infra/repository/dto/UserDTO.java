@@ -11,7 +11,6 @@ public class UserDTO implements Serializable {
     private UUID protocol;
     private String email;
     private String bucket;
-    private String status;
     private String filename;
     private LocalDateTime data;
 
@@ -28,7 +27,6 @@ public class UserDTO implements Serializable {
         this.protocol = protocol;
         this.email = email;
         this.bucket = bucket;
-        this.status = status;
         this.data = data;
     }
 
@@ -72,14 +70,6 @@ public class UserDTO implements Serializable {
 
     public void setBucket(String bucket) {
         this.bucket = bucket;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(String status) {
-        this.status = status;
     }
 
     public LocalDateTime getData() {

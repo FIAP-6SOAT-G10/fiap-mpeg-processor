@@ -13,7 +13,6 @@ public class UserMapper {
         user.setName(userDTO.getName());
         user.setEmail(userDTO.getEmail());
         user.setProtocol(userDTO.getProtocol());
-        user.setStatus(userDTO.getStatus());
         return user;
     }
 
@@ -25,9 +24,6 @@ public class UserMapper {
         dto.setName(user.getName());
         dto.setEmail(user.getEmail());
         dto.setProtocol(user.getProtocol());
-        dto.setStatus(user.getStatus());
         return dto;
     }
-
-
 }

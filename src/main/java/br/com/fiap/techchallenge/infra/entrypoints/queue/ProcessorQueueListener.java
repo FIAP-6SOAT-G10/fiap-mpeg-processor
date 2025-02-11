@@ -20,7 +20,7 @@ public class ProcessorQueueListener {
     public void listen(ProcessorRequestDTO request) throws IOException {
         log.info("Mensagem recebida da fila {}", request);
         useCase.execute(request);
-        log.info("Mensagem processado com sucesso");
+        log.info("Mensagem processada com sucesso");
     }
 
 }

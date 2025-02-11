@@ -16,6 +16,7 @@ public class UserDetailMapper {
         detail.setId(userDetailDTO.getId());
         detail.setStatus(userDetailDTO.getStatus());
         detail.setFilename(userDetailDTO.getFilename());
+        detail.setError(userDetailDTO.getError());
 
         User user = new User();
         user.setId(userDetailDTO.getUser().getId());
@@ -24,7 +25,6 @@ public class UserDetailMapper {
         user.setName(userDetailDTO.getUser().getName());
         user.setEmail(userDetailDTO.getUser().getEmail());
         user.setProtocol(userDetailDTO.getUser().getProtocol());
-        user.setStatus(userDetailDTO.getUser().getStatus());
         detail.setUser(user);
 
         return detail;
@@ -38,8 +38,7 @@ public class UserDetailMapper {
         user.setName(detail.getUser().getName());
         user.setEmail(detail.getUser().getEmail());
         user.setProtocol(detail.getUser().getProtocol());
-        user.setStatus(detail.getUser().getStatus());
-        return  new UserDetailDTO(detail.getId(),detail.getStatus(), detail.getFilename(), user );
+        return  new UserDetailDTO(detail.getId(), detail.getFilename(), detail.getStatus(), user, detail.getError() );
     }
 
     public List<UserDetailDTO> fromListEntityToListDomain(List<UserDetail> listDetail){

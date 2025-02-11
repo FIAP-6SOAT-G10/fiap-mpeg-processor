@@ -1,5 +1,6 @@
 package br.com.fiap.techchallenge.application.usecases;
 
+import br.com.fiap.techchallenge.infra.exception.ZipFileException;
 import com.amazonaws.AmazonServiceException;
 import com.amazonaws.SdkClientException;
 import com.amazonaws.services.s3.AmazonS3;
@@ -12,6 +13,8 @@ import java.io.FileOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
+import static br.com.fiap.techchallenge.domain.enums.ErrosEnum.ZIP_FILE_PROCESSED_ERROR;
+
 @Slf4j
 public class ProcessorOutUseCase {
 
@@ -21,8 +24,8 @@ public class ProcessorOutUseCase {
     @Value("${aws.s3.bucket.out.name}")
     private String bucketOut;
 
-    public void consumerFilesInBucket(String prefix, AmazonS3 s3) {
-
+    public String consumerFilesInBucket(String prefix, AmazonS3 s3) {
+        log.info("ProcessorOutUseCase:consumerFilesInBucket  prefix {}  s3 {}  ", prefix, s3);
         ObjectListing objectListing = s3.listObjects(new ListObjectsRequest().withBucketName(bucketOut).withPrefix(prefix +"/images/"));
         String pastaDestino = "";
 
@@ -30,8 +33,8 @@ public class ProcessorOutUseCase {
             if (objectSummary.getSize() == 0) {
                 continue;
             }
-            log.info(" - " + objectSummary.getKey() + "  (size = " + objectSummary.getSize() + ")");
 
+            log.info(" - " + objectSummary.getKey() + "  (size = " + objectSummary.getSize() + ")");
             String chaveOrigem = objectSummary.getKey();
             String nomeArquivo = chaveOrigem.substring(chaveOrigem.lastIndexOf("/") + 1);
             pastaDestino = chaveOrigem.substring(0, chaveOrigem.lastIndexOf("/") + 1) + FOLDER_PROCESSED ;
@@ -48,16 +51,17 @@ public class ProcessorOutUseCase {
                 System.err.println("Erro de cliente ao acessar o S3: " + e.getMessage());
             }
         }
-        zipAllFiles(s3, prefix);
+        return zipAllFiles(s3, prefix);
     }
 
-    public void zipAllFiles(AmazonS3 s3Client, String prefix) {
+    public String zipAllFiles(AmazonS3 s3Client, String prefix) {
+        log.info("ProcessorOutUseCase:zipAllFiles  prefix {}  s3 {}  ", prefix, s3Client);
         try {
             File zipFile = new File(FILENAME);
             try (FileOutputStream fos = new FileOutputStream(zipFile);
                  ZipOutputStream zipOut = new ZipOutputStream(fos)) {
 
-                ObjectListing result = s3Client.listObjects(new ListObjectsRequest().withBucketName(bucketOut).withPrefix(prefix + "/images/processados/"));
+                ObjectListing result = s3Client.listObjects(new ListObjectsRequest().withBucketName(bucketOut).withPrefix(prefix + "/images/processed/"));
                 for (S3ObjectSummary objectSummary : result.getObjectSummaries()) {
                     String key = objectSummary.getKey();
                     String chaveOrigem = objectSummary.getKey();
@@ -80,8 +84,9 @@ public class ProcessorOutUseCase {
             String zipKey = prefix + "/compressed-file/" + FILENAME;
             s3Client.putObject(bucketOut, zipKey, zipFile);
             log.info("Arquivo ZIP enviado para o S3: " + zipKey);
+            return zipKey;
         } catch (Exception e) {
-            e.printStackTrace();
+            throw new ZipFileException(ZIP_FILE_PROCESSED_ERROR);
         }
     }
 }

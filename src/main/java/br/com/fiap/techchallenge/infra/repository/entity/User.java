@@ -23,6 +23,7 @@ public class User {
     private String username;
     private String bucket;
     private String status;
+    private String error;
     private LocalDateTime data;
 
 }
