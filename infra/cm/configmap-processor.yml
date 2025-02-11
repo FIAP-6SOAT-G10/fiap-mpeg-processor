@@ -3,5 +3,5 @@ kind: ConfigMap
 metadata:
   name: cm-processor
 data:
-  DB_HOST: fiap-cluster.mopef.mongodb.net
+  DB_HOST: fiap-cluster.mzbza.mongodb.net
   DB_USERNAME: masteruser
