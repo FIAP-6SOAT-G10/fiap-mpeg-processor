@@ -4,17 +4,23 @@ import com.amazonaws.auth.DefaultAWSCredentialsProviderChain;
 import com.amazonaws.regions.Regions;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
+import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import com.amazonaws.services.s3.model.S3Object;
 import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import com.amazonaws.services.sqs.AmazonSQS;
 import com.amazonaws.services.sqs.AmazonSQSClientBuilder;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Path;
+import java.util.Date;
 
 public class Utils {
+
+    private static final String TINY_URL = "http://tinyurl.com/api-create.php?url=";
+    private static final String TINY_URL_ENCODE = "UTF-8";
 
     public static AmazonS3 connectAmazonS3(String region) {
         return AmazonS3Client.builder()
@@ -40,5 +46,26 @@ public class Utils {
             }
         }
         return file;
+    }
+
+    public static String generateUrlpreAssigned(String bucketName, String keyName, AmazonS3 s3Client) throws IOException {
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest(bucketName, keyName);
+        generatePresignedUrlRequest.setExpiration(new Date(System.currentTimeMillis() + 3600 * 1000));
+        URL url = s3Client.generatePresignedUrl(generatePresignedUrlRequest);
+        return generateShortUrl(url.toString());
+    }
+
+    private static String generateShortUrl(String longUrl) throws IOException {
+        URL url = new URL(TINY_URL + URLEncoder.encode(longUrl, TINY_URL_ENCODE));
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
+            String line;
+            StringBuilder response = new StringBuilder();
+            while ((line = reader.readLine()) != null) {
+                response.append(line);
+            }
+            return response.toString();
+        }
     }
 }

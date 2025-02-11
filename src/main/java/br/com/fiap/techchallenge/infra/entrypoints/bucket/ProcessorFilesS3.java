@@ -6,6 +6,7 @@ import br.com.fiap.techchallenge.application.gateways.IUserRepository;
 import br.com.fiap.techchallenge.application.usecases.AmazonSQSUseCase;
 import br.com.fiap.techchallenge.application.usecases.ProcessorOutUseCase;
 import br.com.fiap.techchallenge.domain.enums.StatusEnum;
+import br.com.fiap.techchallenge.domain.util.Utils;
 import br.com.fiap.techchallenge.infra.exception.FileMalFormedException;
 import br.com.fiap.techchallenge.infra.exception.FormatFileException;
 import br.com.fiap.techchallenge.infra.repository.dto.FileResponse;
@@ -23,11 +24,17 @@ import org.bytedeco.opencv.global.opencv_imgcodecs;
 import org.bytedeco.opencv.opencv_core.Mat;
 import org.springframework.beans.factory.annotation.Value;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import static br.com.fiap.techchallenge.domain.enums.ErrosEnum.ERRO_PARAMETRO;
@@ -98,7 +105,7 @@ public class ProcessorFilesS3 implements IProcessor {
                 } else {
                     throw new FormatFileException(ERRO_PARAMETRO);
                 }
-                s3Client.deleteObject(bucketIn, chaveOrigem);
+                //s3Client.deleteObject(bucketIn, chaveOrigem);
                 log.info("Arquivo excluído: " + chaveOrigem);
             } catch (FileMalFormedException e) {
                 detail.setStatus(StatusEnum.ERROR.getNominalStatus());
@@ -106,8 +113,10 @@ public class ProcessorFilesS3 implements IProcessor {
             }
             detailRepository.saveUserDetail(detail);
         }
+
         String pathFile = processorOut.consumerFilesInBucket(prefix, s3Client);
-        completeAndDispatchToQueue(user, pathFile);
+        String urlpreAssigned = Utils.generateUrlpreAssigned(bucketOut, pathFile, s3Client);
+        completeAndDispatchToQueue(user, pathFile, urlpreAssigned);
     }
 
     private void executeFile(String chaveOrigem, String nomeArquivo, AmazonS3 s3Client, String prefix, UserDTO user, Path tempDir) throws IOException {
@@ -149,8 +158,11 @@ public class ProcessorFilesS3 implements IProcessor {
         }
     }
 
-    private void completeAndDispatchToQueue(UserDTO user, String pathFile) throws JsonProcessingException {
+    private void completeAndDispatchToQueue(UserDTO user, String pathFile, String urlpreAssigned) throws JsonProcessingException {
         log.info("ProcessorFilesS3:completeAndDispatchToQueue  user {}  pathFile {} ", user, pathFile);
+
+
+
         List<UserDetailDTO> details = detailRepository.findByUser(user);
         List<FileResponseDetail> filesDetail = new ArrayList<>();
         details.forEach(it -> {
@@ -165,7 +177,7 @@ public class ProcessorFilesS3 implements IProcessor {
                 .builder()
                 .recipientEmail(user.getEmail())
                 .recipientName(user.getName())
-                .url(pathFile)
+                .url(urlpreAssigned)
                 .protocol(user.getProtocol())
                 .files(filesDetail)
                 .build());
