@@ -24,7 +24,7 @@ springdoc:
 
 aws:
   account:
-    number: 115353667788
+    number: 115666561529
   region:
     name: us-east-1
   sqs:
