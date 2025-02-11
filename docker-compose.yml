@@ -3,6 +3,6 @@ services:
     container_name: processor
     build:
       context: .
-    image: 115353667788.dkr.ecr.us-east-1.amazonaws.com/fiap-mpeg-processor:1.0
+    image: 115666561529.dkr.ecr.us-east-1.amazonaws.com/fiap-mpeg-processor:1.0
     ports:
       - "8080:8080"
