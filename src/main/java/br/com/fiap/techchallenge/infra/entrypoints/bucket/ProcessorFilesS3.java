@@ -89,7 +89,7 @@ public class ProcessorFilesS3 implements IProcessor {
                 String nomeArquivo = chaveOrigem.substring(chaveOrigem.lastIndexOf("/") + 1);
                 ObjectMetadata metadata = s3Client.getObjectMetadata(bucketName, chaveOrigem);
                 String contentType = metadata.getContentType();
-                UserDetailDTO detail = new UserDetailDTO(nomeArquivo, StatusEnum.SUCESS.getNominalStatus(), user, "");
+                UserDetailDTO detail = new UserDetailDTO(nomeArquivo, StatusEnum.SUCCESS.getNominalStatus(), user, "");
 
             try {
 

@@ -2,7 +2,7 @@ package br.com.fiap.techchallenge.domain.enums;
 
 public enum StatusEnum {
 
-    SUCESS("SUCESS"),
+    SUCCESS("SUCCESS"),
     ERROR("ERROR");
 
     private final String nominalStatus;
