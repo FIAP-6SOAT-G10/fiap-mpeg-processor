@@ -124,7 +124,7 @@ public class ProcessorFilesS3 implements IProcessor {
         S3Object s3Object = s3Client.getObject(bucketIn, chaveOrigem);
         log.info("Pasta temporária criada: " + tempDir.toAbsolutePath());
         convertS3ObjectToFile(s3Object, tempDir, nomeArquivo);
-        processMp4Video(tempDir.toAbsolutePath() + "\\" + nomeArquivo, s3Client, prefix, user, tempDir);
+        processMp4Video(tempDir.toAbsolutePath() + File.pathSeparator + nomeArquivo, s3Client, prefix, user, tempDir);
     }
 
     public void processMp4Video(String videoPath, AmazonS3 s3Client, String prefix, UserDTO user, Path tempDir) throws IOException {
@@ -143,7 +143,7 @@ public class ProcessorFilesS3 implements IProcessor {
                 if (frame != null && frameCount % frameInterval == 0) {
                     Mat mat = converter.convert(frame);
                     String filename = "image_" + frameCount + ".png";
-                    String imageFileName = tempDir.toAbsolutePath() + "\\" + filename;
+                    String imageFileName = tempDir.toAbsolutePath() + File.pathSeparator + filename;
                     opencv_imgcodecs.imwrite(imageFileName, mat);
                     log.info("Imagem salva: " + imageFileName);
                     File f = new File(imageFileName);
